@@ -13,8 +13,7 @@ from sklearn.impute import SimpleImputer, MissingIndicator
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, OrdinalEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.utils import all_estimators
-from sklearn.base import RegressorMixin
-from sklearn.base import ClassifierMixin
+from sklearn.base import RegressorMixin, ClassifierMixin
 from sklearn.metrics import (
     accuracy_score,
     balanced_accuracy_score,
@@ -67,6 +66,7 @@ removed_regressors = [
     "RegressorChain",
     "VotingRegressor",
 ]
+
 CLASSIFIERS = [est for est in all_estimators() if
                (issubclass(est[1], ClassifierMixin) and (est[0] not in removed_classifiers))]
 
@@ -241,9 +241,7 @@ class LazyClassifier:
         names = []
         TIME = []
         predictions = {}
-
-        if self.custom_metric is not None:
-            CUSTOM_METRIC = []
+        CUSTOM_METRIC = []
 
         if isinstance(X_train, np.ndarray):
             X_train = pd.DataFrame(X_train)
@@ -252,17 +250,21 @@ class LazyClassifier:
         numeric_features = X_train.select_dtypes(include=[np.number]).columns
         categorical_features = X_train.select_dtypes(include=["object"]).columns
 
-        categorical_low, categorical_high = get_card_split(
-            X_train, categorical_features
-        )
+        transformers = []
 
-        preprocessor = ColumnTransformer(
-            transformers=[
-                ("numeric", numeric_transformer, numeric_features),
-                ("categorical_low", categorical_transformer_low, categorical_low),
-                ("categorical_high", categorical_transformer_high, categorical_high),
-            ]
-        )
+        if len(numeric_features) > 0:
+            transformers.append(("numeric", numeric_transformer, numeric_features))
+        if len(categorical_features) > 0:
+            categorical_low, categorical_high = get_card_split(
+                X_train, categorical_features
+            )
+
+            if len(categorical_low) > 0:
+                transformers.append(("categorical_low", categorical_transformer_low, categorical_low))
+            if len(categorical_high) > 0:
+                transformers.append(("categorical_high", categorical_transformer_high, categorical_high))
+
+        preprocessor = ColumnTransformer(transformers=transformers)
 
         if self.classifiers == "all":
             self.classifiers = CLASSIFIERS
@@ -270,7 +272,7 @@ class LazyClassifier:
             try:
                 temp_list = []
                 for classifier in self.classifiers:
-                    full_name = (classifier.__class__.__name__, classifier)
+                    full_name = (classifier.__class__.__name__, classifier.__class__)
                     temp_list.append(full_name)
                 self.classifiers = temp_list
             except Exception as exception:
@@ -541,9 +543,7 @@ class LazyRegressor:
         names = []
         TIME = []
         predictions = {}
-
-        if self.custom_metric:
-            CUSTOM_METRIC = []
+        CUSTOM_METRIC = []
 
         if isinstance(X_train, np.ndarray):
             X_train = pd.DataFrame(X_train)
@@ -552,17 +552,21 @@ class LazyRegressor:
         numeric_features = X_train.select_dtypes(include=[np.number]).columns
         categorical_features = X_train.select_dtypes(include=["object"]).columns
 
-        categorical_low, categorical_high = get_card_split(
-            X_train, categorical_features
-        )
+        transformers = []
 
-        preprocessor = ColumnTransformer(
-            transformers=[
-                ("numeric", numeric_transformer, numeric_features),
-                ("categorical_low", categorical_transformer_low, categorical_low),
-                ("categorical_high", categorical_transformer_high, categorical_high),
-            ]
-        )
+        if len(numeric_features) > 0:
+            transformers.append(("numeric", numeric_transformer, numeric_features))
+        if len(categorical_features) > 0:
+            categorical_low, categorical_high = get_card_split(
+                X_train, categorical_features
+            )
+
+            if len(categorical_low) > 0:
+                transformers.append(("categorical_low", categorical_transformer_low, categorical_low))
+            if len(categorical_high) > 0:
+                transformers.append(("categorical_high", categorical_transformer_high, categorical_high))
+
+        preprocessor = ColumnTransformer(transformers=transformers)
 
         if self.regressors == "all":
             self.regressors = REGRESSORS
