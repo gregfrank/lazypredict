@@ -25,7 +25,7 @@ from sklearn.metrics import (
 import warnings
 import xgboost
 
-# import catboost
+import catboost
 import lightgbm
 
 warnings.filterwarnings("ignore")
@@ -74,11 +74,11 @@ REGRESSORS = [est for est in all_estimators() if
 
 REGRESSORS.append(("XGBRegressor", xgboost.XGBRegressor))
 REGRESSORS.append(("LGBMRegressor", lightgbm.LGBMRegressor))
-# REGRESSORS.append(('CatBoostRegressor',catboost.CatBoostRegressor))
+REGRESSORS.append(('CatBoostRegressor',catboost.CatBoostRegressor))
 
 CLASSIFIERS.append(("XGBClassifier", xgboost.XGBClassifier))
 CLASSIFIERS.append(("LGBMClassifier", lightgbm.LGBMClassifier))
-# CLASSIFIERS.append(('CatBoostClassifier',catboost.CatBoostClassifier))
+CLASSIFIERS.append(('CatBoostClassifier',catboost.CatBoostClassifier))
 
 numeric_transformer = Pipeline(
     steps=[("imputer", SimpleImputer(strategy="mean")), ("scaler", StandardScaler())]
