@@ -35,6 +35,15 @@ To install Lazy Predict::
 
     pip install lazypredict
 
+============
+Testing
+============
+
+To test Lazy Predict::
+
+
+    python setup.py test
+
 =====
 Usage
 =====
@@ -97,7 +106,7 @@ Example ::
     | ExtraTreeClassifier            |   0.922807 |            0.912168 |  0.912168 |   0.922462 |    0.0109999 |
     | CheckingClassifier             |   0.361404 |            0.5      |  0.5      |   0.191879 |    0.0170043 |
     | DummyClassifier                |   0.512281 |            0.489598 |  0.489598 |   0.518924 |    0.0119965 |
-    
+
 ==========
 Regression
 ==========
