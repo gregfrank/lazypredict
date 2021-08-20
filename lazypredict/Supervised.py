@@ -25,7 +25,7 @@ from sklearn.metrics import (
 import warnings
 import xgboost
 
-import catboost
+# import catboost
 import lightgbm
 
 warnings.filterwarnings("ignore")
