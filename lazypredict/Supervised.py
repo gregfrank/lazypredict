@@ -50,21 +50,21 @@ removed_classifiers = [
 ]
 
 removed_regressors = [
-    "TheilSenRegressor",
-    "ARDRegression",
-    "CCA",
-    "IsotonicRegression",
-    "StackingRegressor",
-    "MultiOutputRegressor",
-    "MultiTaskElasticNet",
-    "MultiTaskElasticNetCV",
-    "MultiTaskLasso",
-    "MultiTaskLassoCV",
-    "PLSCanonical",
-    "PLSRegression",
-    "RadiusNeighborsRegressor",
-    "RegressorChain",
-    "VotingRegressor",
+    # "TheilSenRegressor",
+    # "ARDRegression",
+    # "CCA",
+    # "IsotonicRegression",
+    # "StackingRegressor",
+    # "MultiOutputRegressor",
+    # "MultiTaskElasticNet",
+    # "MultiTaskElasticNetCV",
+    # "MultiTaskLasso",
+    # "MultiTaskLassoCV",
+    # "PLSCanonical",
+    # "PLSRegression",
+    # "RadiusNeighborsRegressor",
+    # "RegressorChain",
+    # "VotingRegressor",
 ]
 CLASSIFIERS = [est for est in all_estimators() if
                (issubclass(est[1], ClassifierMixin) and (est[0] not in removed_classifiers))]
